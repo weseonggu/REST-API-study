@@ -58,7 +58,9 @@ public class UserResource {
 				.path("/{id}")// 패스 매개변수 붙이기
 				.buildAndExpand(savedUser.getId())// 페스 매개변수에 값넣기 
 				.toUri();
-
+		System.out.println(location);
+		System.out.println(savedUser);
+		System.out.println(ResponseEntity.created(location).build());
 		return ResponseEntity.created(location).build();
 	}
 }
