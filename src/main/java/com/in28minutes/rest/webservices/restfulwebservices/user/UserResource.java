@@ -1,8 +1,14 @@
 package com.in28minutes.rest.webservices.restfulwebservices.user;
 
+//WebMvcLinkBuilder에 있는 메소드에 대한 정적 임포트를 수행
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +35,16 @@ public class UserResource {
 
 	// user데이터에서 원하는 정보만 검색
 	@GetMapping(path = "/users/{id}")
-	public User retrieveSearchUsers(@PathVariable int id) {
+	public EntityModel<User> retrieveSearchUsers(@PathVariable int id) {
 		User user = service.findOne(id);
 		if(user==null)
 			throw new UserNotFoundException("없는 id:"+id);
-		return user;
+		
+		EntityModel<User> entityModel = EntityModel.of(user);
+		// WebMvcLinkBuilder = 스프링 MVC컨트롤러를 가르키는 링크 인스턴스의 구축을 용이하게 하는 빌더
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrieveAllUsers());// 이 클래스의 retrieveAllUsers()의 url을 가져옴
+		entityModel.add(link.withRel("all-users"));
+		return entityModel;
 	}
 	
 	// user데이터에서 원하는 정보만 검색
