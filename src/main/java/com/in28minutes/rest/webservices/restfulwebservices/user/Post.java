@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Post {
 	@GeneratedValue
 	private Integer id;
 	
+	@Size(min=10)
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY) //[다대일]
